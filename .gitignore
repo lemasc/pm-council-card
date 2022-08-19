@@ -30,3 +30,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# static data
+generated/*
+public/sources/*
+data.json
+public/config.json
