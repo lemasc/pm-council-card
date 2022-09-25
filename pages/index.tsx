@@ -1,65 +1,16 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import data from "../data.json";
-
-type D = typeof data;
-type DataObject = D["0"];
-
-type Sections =
-  | "ประธานนักเรียน"
-  | "เลขานุการ"
-  | "ฝ่ายกิจการนักเรียน"
-  | "ฝ่ายกีฬาและนันทนาการ"
-  | "ฝ่ายเทคโนโลยีสารสนเทศ"
-  | "ฝ่ายวิชาการ"
-  | "ฝ่ายสิ่งแวดล้อม";
-
-type Source = Omit<DataObject, "section"> & {
-  section: Sections;
-};
+import { fetchImage } from "../lib/fetch";
+import { maxValue, percentToStep, stepToPercent } from "../lib/step";
+import { Source } from "../lib/types";
 
 const sources = data as Source[];
-
-const fetchWith404 = async (
-  url: string,
-  fallback?: () => Promise<AxiosResponse<Blob>>
-) => {
-  try {
-    return await axios.get<Blob>(url, {
-      responseType: "blob",
-    });
-  } catch (err) {
-    if (fallback && axios.isAxiosError(err) && err.response?.status === 404) {
-      return fallback();
-    } else {
-      throw err;
-    }
-  }
-};
-
-const fetchImage = async (data: Source) => {
-  const baseUrl = `/sources/${data.section}`;
-  return fetchWith404(`${baseUrl}/${data.name}.jpg`, () => {
-    return fetchWith404(`${baseUrl}/${data.name}.png`, () => {
-      return fetchWith404(`${baseUrl}/${data.name}/ติดบัตร.jpg`);
-    });
-  });
-};
-
-const maxValue = 60;
-
-const stepToPercent = (step: number) => {
-  return step + 20;
-};
-
-const percentToStep = (percent: string) => {
-  return parseFloat(percent.slice(0, -1)) - 20;
-};
 
 export default function Home() {
   const [index, setIndex] = useState(0);

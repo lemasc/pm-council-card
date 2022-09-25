@@ -15,13 +15,22 @@ const verifyPayload = (payload: any): payload is [number, number][] => {
     )
   );
 };
+
+const verifyPostPayload = (payload: any): payload is [number, number][][] => {
+  return (
+    Array.isArray(payload) &&
+    payload.length === 5 &&
+    payload.every(verifyPayload)
+  );
+};
+
 const handler: NextApiHandler = (req, res) => {
   try {
     if (req.method !== "POST") throw new Error("Invalid request");
-    if (!req.body.payload || !verifyPayload(req.body.payload))
+    if (!req.body.payload || !verifyPostPayload(req.body.payload))
       throw new Error("Invalid payload");
     fs.writeFile(
-      path.join(process.cwd(), "public", "config.json"),
+      path.join(process.cwd(), "public", "config-posts.json"),
       JSON.stringify(req.body.payload)
     );
     res.status(200).end();

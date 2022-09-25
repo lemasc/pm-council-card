@@ -1,3 +1,15 @@
+@font-face {
+  font-family: "kor bau Med";
+  src: url("../fonts/korbau-Medium.eot");
+  src: url("../fonts/korbau-Medium.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/korbau-Medium.woff2") format("woff2"),
+    url("../fonts/korbau-Medium.woff") format("woff"),
+    url("../fonts/korbau-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 html,
 body {
   padding: 0;

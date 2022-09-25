@@ -8,16 +8,18 @@ const capturePage = async (page: Page, filename: string) => {
   await page.waitForNetworkIdle({
     idleTime: 750,
   });
-  createIfNotExist("generated/" + filename.slice(0, filename.indexOf("/")));
+  createIfNotExist(
+    "generated_posts/" + filename.slice(0, filename.indexOf("/"))
+  );
   // Screenshot the image to PNG file
   await page.screenshot({
-    path: path.join(process.cwd(), "generated", filename),
+    path: path.join(process.cwd(), "generated_posts", filename),
     type: "png",
     clip: {
       x: 0,
       y: 0,
-      width: 1050,
-      height: 1500,
+      width: 2048,
+      height: 2048,
     },
   });
 };
@@ -28,14 +30,14 @@ async function main() {
     headless: true,
     args: [],
     defaultViewport: {
-      width: 1300,
-      height: 1500,
+      width: 2368,
+      height: 2048,
     },
   });
   const page = await browser.newPage();
-  await page.goto("http://localhost:3000");
-  await createOrOverWriteFolder("generated");
-  for (let i = 0; i < 59; i++) {
+  await page.goto("http://localhost:3000/posts");
+  await createOrOverWriteFolder("generated_posts");
+  for (let i = 0; i < 30; i++) {
     const filename = (await page.evaluate(
       () => (document.querySelector("#filename") as any).innerText
     )) as string;
